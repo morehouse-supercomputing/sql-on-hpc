@@ -3,9 +3,9 @@ layout: default
 title: SQL on HPC
 ---
 
-# SQL on HPC: Querying Large Databases on TACC
+# SQL on HPC: Querying Large Databases
 
-This guide walks you through running SQL queries on a large dataset using TACC's HPC systems. The dataset is too big for most laptops — that's the point.
+This guide walks you through running SQL queries on a large dataset using HPC. The dataset is too big for most laptops — that's the point.
 
 **Dataset:** NYC Yellow Taxi trips (2023) — ~20 million trips, ~9 GB total on disk
 
@@ -15,19 +15,19 @@ This guide walks you through running SQL queries on a large dataset using TACC's
 
 ## Prerequisites
 
-- A TACC account with MFA set up ([MSF Getting Started guide](https://ashleyscruse.github.io/msf-getting-started/))
-- Access to a TACC system (Vista, Lonestar6, Stampede3, etc.)
+- An HPC account with MFA set up ([MSF Getting Started guide](https://ashleyscruse.github.io/msf-getting-started/))
+- Access to an HPC system (e.g., Vista, Lonestar6, Stampede3)
 - An active allocation
 
 ---
 
-## Step 1: Log into TACC
+## Step 1: Log into the HPC System
 
 ```bash
 ssh your_username@vista.tacc.utexas.edu
 ```
 
-> Replace `vista` with your system. See the [Jupyter on TACC guide](https://ashleyscruse.github.io/jupyter-on-tacc/) if you need help with SSH.
+> Replace `vista` with your system. See the [Jupyter on HPC guide](https://ashleyscruse.github.io/jupyter-on-hpc/) if you need help with SSH.
 
 ---
 
@@ -64,7 +64,7 @@ You should see ~20 million rows.
 
 ### From a Jupyter notebook
 
-If you're using Jupyter on TACC (see the [Jupyter guide](https://ashleyscruse.github.io/jupyter-on-tacc/)):
+If you're using Jupyter on HPC (see the [Jupyter guide](https://ashleyscruse.github.io/jupyter-on-hpc/)):
 
 ```python
 import sqlite3
@@ -265,16 +265,16 @@ ORDER BY hour_of_day;
 
 This database has ~20 million rows and takes up ~9 GB on disk. Here's why you'd want HPC for this:
 
-| | Your Laptop | TACC Compute Node |
+| | Your Laptop | HPC Compute Node |
 |---|---|---|
 | RAM | 8-16 GB | 128-223 GB |
 | Disk | Limited SSD | 1 TB+ on $WORK |
 | Full table scan on 20M rows | Slow, might swap to disk | Fast, fits in memory |
 | Multiple queries at once | Bogs down | Plenty of headroom |
 
-A query that scans all 20 million rows needs to load the database into memory. At ~9 GB, a laptop with 8 GB of RAM can't hold it without swapping to disk. On TACC with 223 GB of RAM, 9 GB is a rounding error.
+A query that scans all 20 million rows needs to load the database into memory. At ~9 GB, a laptop with 8 GB of RAM can't hold it without swapping to disk. On HPC with 223 GB of RAM, 9 GB is a rounding error.
 
-> **For instructors:** The real teaching moment is when a student runs a query on their laptop and it takes 30 seconds, then runs the same query on TACC and it takes 2 seconds. That's the "aha."
+> **For instructors:** The real teaching moment is when a student runs a query on their laptop and it takes 30 seconds, then runs the same query on HPC and it takes 2 seconds. That's the "aha."
 
 ---
 
@@ -301,10 +301,10 @@ A query that scans all 20 million rows needs to load the database into memory. A
 ## Troubleshooting
 
 **"sqlite3: command not found"**
-- SQLite is usually available system-wide on TACC. Try `/usr/bin/sqlite3`. If not, run `module load gcc/13.2.0` then `module load sqlite`.
+- SQLite is usually available system-wide on HPC. Try `/usr/bin/sqlite3`. If not, run `module load gcc/13.2.0` then `module load sqlite`.
 
 **"setup_data.sh is taking forever"**
-- The download is ~3 GB. On TACC it should take 5-10 minutes. Make sure you're on the login node (not a compute node) for better network access.
+- The download is ~3 GB. On HPC it should take 5-10 minutes. Make sure you're on the login node (not a compute node) for better network access.
 
 **"database is locked"**
 - Only one process can write to SQLite at a time. If the setup script failed partway, delete the database and re-run: `rm data/nyc_taxi.db && bash scripts/setup_data.sh`

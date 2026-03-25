@@ -1,6 +1,6 @@
 # SQL on HPC
 
-A template for running SQL queries on large datasets using TACC's HPC systems. Designed for database systems courses.
+A template for running SQL queries on large datasets using HPC systems. Designed for database systems courses.
 
 ## Guide
 
@@ -8,12 +8,12 @@ A template for running SQL queries on large datasets using TACC's HPC systems. D
 
 ## What's Inside
 
-- Step-by-step guide for running SQLite on TACC
+- Step-by-step guide for running SQLite on HPC
 - Setup script that downloads and loads the NYC Taxi dataset (~20 million trips, ~9 GB)
 - Example queries from basic to advanced
 - Ready for any professor to adapt for their course
 
-## Quick Start (on TACC)
+## Quick Start (on HPC)
 
 ```bash
 cd $WORK
