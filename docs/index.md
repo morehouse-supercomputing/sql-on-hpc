@@ -31,9 +31,7 @@ ssh your_username@vista.tacc.utexas.edu
 
 ---
 
-## Step 2: Choose How to Get the Database
-
-Start by cloning the repo:
+## Step 2: Clone the Repo
 
 ```bash
 cd $WORK
@@ -42,7 +40,11 @@ cd sql-on-hpc
 mkdir -p data
 ```
 
-Then choose one setup path. All three options should leave you with the same file:
+---
+
+## Step 3: Choose How to Get the Database
+
+Now choose one setup path. All three options should leave you with the same file:
 
 ```bash
 data/nyc_taxi.db
@@ -94,7 +96,7 @@ You can inspect `scripts/setup_data.sh` as a reference, but your script does not
 
 ---
 
-## Step 3: Open the Database
+## Step 4: Open the Database
 
 ### From the command line
 
