@@ -65,7 +65,7 @@ Run that command from your own computer, not from inside the SSH session. The qu
 If your instructor staged the database on the HPC system, copy it from the shared location:
 
 ```bash
-cp /path/to/shared/nyc_taxi.db data/
+cp /work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db data/
 ```
 
 This is the fastest path. You skip the data build and go straight to querying.
