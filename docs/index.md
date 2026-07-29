@@ -31,18 +31,66 @@ ssh your_username@vista.tacc.utexas.edu
 
 ---
 
-## Step 2: Clone the Repo and Set Up the Data
+## Step 2: Choose How to Get the Database
+
+Start by cloning the repo:
 
 ```bash
 cd $WORK
 git clone https://github.com/morehouse-supercomputing/sql-on-hpc.git
 cd sql-on-hpc
+mkdir -p data
+```
+
+Then choose one setup path. All three options should leave you with the same file:
+
+```bash
+data/nyc_taxi.db
+```
+
+### Option A: Copy a pre-built database
+
+Use this option if your instructor has already built the database for you.
+
+If the database is on your computer, upload it from your computer's terminal:
+
+```bash
+scp /path/to/nyc_taxi.db your_username@vista.tacc.utexas.edu:'$WORK/sql-on-hpc/data/'
+```
+
+Run that command from your own computer, not from inside the SSH session. The quotes keep `$WORK` from expanding on your computer before `scp` connects to the HPC system.
+
+If your instructor staged the database on the HPC system, copy it from the shared location:
+
+```bash
+cp /path/to/shared/nyc_taxi.db data/
+```
+
+This is the fastest path. You skip the data build and go straight to querying.
+
+### Option B: Run the setup script
+
+Use this option if you want the repo to download the raw files and build the database for you:
+
+```bash
 bash scripts/setup_data.sh
 ```
 
 This downloads 12 months of NYC taxi data (~3 GB), loads it into a SQLite database (~6 GB), and creates indexes. About ~9 GB total disk. Takes 10-15 minutes.
 
-> **Instructor tip:** Run this before class so students don't wait. You can clone once to a shared directory, or have each student run it on their own `$WORK`.
+### Option C: Write your own setup script
+
+Use this option if your assignment asks you to build the database yourself. Your script should:
+
+1. Download or read the 2023 NYC Yellow Taxi Parquet files.
+2. Select and rename the columns used in this guide.
+3. Load the rows into a SQLite table named `trips`.
+4. Create the `zones` lookup table.
+5. Save the finished database as `data/nyc_taxi.db`.
+
+You can inspect `scripts/setup_data.sh` as a reference, but your script does not have to match it exactly.
+
+> **Instructor tip:** These are three setup paths to the same assignment. For a live class, the pre-built database is the safest default. The setup script and custom-script paths are useful when you want students to see or control how the database was built.
 
 ---
 
