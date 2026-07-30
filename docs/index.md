@@ -44,31 +44,23 @@ mkdir -p data
 
 ## Step 3: Choose How to Get the Database
 
-Now choose one setup path. All three options should leave you with the same file:
+Now choose one setup path. Both options run on the HPC system and leave you with the same file:
 
 ```bash
 data/nyc_taxi.db
 ```
 
-### Option A: Copy a pre-built database
+### Option A: Copy the pre-built database
 
-Use this option if your instructor has already built the database for you.
-
-If the database is on your computer, upload it from your computer's terminal:
-
-```bash
-scp /path/to/nyc_taxi.db your_username@vista.tacc.utexas.edu:'$WORK/sql-on-hpc/data/'
-```
-
-Run that command from your own computer, not from inside the SSH session. The quotes keep `$WORK` from expanding on your computer before `scp` connects to the HPC system.
-
-If your instructor staged the database on the HPC system, copy it from the shared location:
+Use this option if your instructor has already staged the database on the HPC system. Copy it from the shared location:
 
 ```bash
 cp /work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db data/
 ```
 
 This is the fastest path. You skip the data build and go straight to querying.
+
+The database never touches your laptop. It is built on the HPC system and stays there, which is the whole reason you are working on the HPC system in the first place.
 
 ### Option B: Run the setup script
 
@@ -80,19 +72,9 @@ bash scripts/setup_data.sh
 
 This downloads 12 months of NYC taxi data (~3 GB), loads it into a SQLite database (~6 GB), and creates indexes. About ~9 GB total disk. Takes 10-15 minutes.
 
-### Option C: Write your own setup script
-
-Use this option if your assignment asks you to build the database yourself. Your script should:
-
-1. Download or read the 2023 NYC Yellow Taxi Parquet files.
-2. Select and rename the columns used in this guide.
-3. Load the rows into a SQLite table named `trips`.
-4. Create the `zones` lookup table.
-5. Save the finished database as `data/nyc_taxi.db`.
-
-You can inspect `scripts/setup_data.sh` as a reference, but your script does not have to match it exactly.
-
-> **Instructor tip:** These are three setup paths to the same assignment. For a live class, the pre-built database is the safest default. The setup script and custom-script paths are useful when you want students to see or control how the database was built.
+> **Instructor tip:** Both paths land on the same database, and both run entirely on the HPC system. For a live class, the staged copy is the safest default. Use the setup script when you want students to watch the database get built.
+>
+> For an advanced class, add a third path: have students write their own build script instead of running `scripts/setup_data.sh`. It should read the 2023 NYC Yellow Taxi Parquet files, select and rename the columns used in this guide, load the rows into a `trips` table, create the `zones` lookup table, and save the result as `data/nyc_taxi.db`. `scripts/setup_data.sh` works as a reference; their version does not have to match it.
 
 ---
 
