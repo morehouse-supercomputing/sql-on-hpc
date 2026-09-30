@@ -48,7 +48,7 @@ Reusable SQL-on-HPC template (NYC Taxi dataset, ~38M rows on Vista) + guest lect
 ## Overview
 
 ### Goal
-Deliver SQL on HPC as a guest lecture (April 27, 2026) for Kenneth Scoti's database systems course, using the reusable NYC Taxi dataset template hosted by MSCF. Maintain the template so other instructors can adopt it.
+Deliver SQL on HPC as a guest lecture (April 27, 2026) for Kenneth Scoti's database systems course, using the reusable NYC Taxi dataset template hosted by MSF. Maintain the template so other instructors can adopt it.
 
 ### Why this matters
 The April 27 delivery validated the SQL-on-HPC template against a live database systems course. It also produced the materials package (slides, lesson plan, runbook) that any instructor can pick up. The template uses the NYC Taxi dataset (~38M trips, ~9 GB), which is large enough to be a real HPC exercise but small enough to fit in a single class period. Sets up summer 2026 NAIRR Accelerator instructors to adopt it without rebuilding.

@@ -15,7 +15,7 @@ This guide walks you through running SQL queries on a large dataset using HPC. T
 
 ## Prerequisites
 
-- An HPC account with MFA set up ([MSCF Getting Started guide](https://morehouse-supercomputing.github.io/mscf-getting-started/))
+- An HPC account with MFA set up ([MSF Getting Started guide](https://morehouse-supercomputing.github.io/mscf-getting-started/))
 - Access to an HPC system (e.g., Vista, Lonestar6, Stampede3)
 - An active allocation
 
