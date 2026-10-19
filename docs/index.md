@@ -286,7 +286,3 @@ A query that scans all 38 million rows needs to load the database into memory. A
 | Pretty output | `.mode column` then `.headers on` |
 | Export to CSV | `.mode csv` then `.output results.csv` then run query |
 | Exit SQLite | `.quit` |
-
----
-
-*Teaching this workshop? See the [instructor guide](instructors.html).*
