@@ -16,74 +16,28 @@ This guide walks you through running SQL queries on a large dataset using HPC. T
 ## Prerequisites
 
 - An HPC account with MFA set up ([MSF Getting Started guide](https://morehouse-supercomputing.github.io/mscf-getting-started/))
-- Access to an HPC system (e.g., Vista, Lonestar6, Stampede3)
-- An active allocation
+- Membership on the allocation your instructor is using
+- **Log in once before class** to confirm your account and MFA work, so class time goes to the queries
 
 ---
 
-## Step 1: Log into the HPC System
+## Step 1: Open a Terminal in TAP
 
-```bash
-ssh your_username@vista.tacc.utexas.edu
-```
+1. Go to the [TACC Analysis Portal (TAP)](https://tap.tacc.utexas.edu) and log in with your TACC username, password, and MFA code.
+2. Start a **Jupyter** session on **Vista**, using the project and reservation your instructor gives you.
+3. When the session is ready, click **Connect**.
+4. In Jupyter, open a **Terminal** from the Launcher.
 
-> Replace `vista` with your system. See the [Jupyter on HPC guide](https://morehouse-supercomputing.github.io/jupyter-on-hpc/) if you need help with SSH.
-
----
-
-## Step 2: Clone the Repo
-
-```bash
-cd $WORK
-git clone https://github.com/morehouse-supercomputing/sql-on-hpc.git
-cd sql-on-hpc
-mkdir -p data
-```
+You are now on a Vista compute node. No SSH needed.
 
 ---
 
-## Step 3: Choose How to Get the Database
+## Step 2: Open the Database
 
-Now choose one setup path. Both options run on the HPC system and leave you with the same file:
-
-```bash
-data/nyc_taxi.db
-```
-
-### Option A: Copy the pre-built database
-
-Use this option if your instructor has already staged the database on the HPC system. Copy it from the shared location:
+The database is already built and staged on Vista. Open it read-only, in one line:
 
 ```bash
-cp /work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db data/
-```
-
-This is the fastest path. You skip the data build and go straight to querying.
-
-The database never touches your laptop. It is built on the HPC system and stays there, which is the whole reason you are working on the HPC system in the first place.
-
-### Option B: Run the setup script
-
-Use this option if you want the repo to download the raw files and build the database for you:
-
-```bash
-bash scripts/setup_data.sh
-```
-
-This downloads 12 months of NYC taxi data (~3 GB), loads it into a SQLite database (~6 GB), and creates indexes. About ~9 GB total disk. Takes 10-15 minutes.
-
-> **Instructor tip:** Both paths land on the same database, and both run entirely on the HPC system. For a live class, the staged copy is the safest default. Use the setup script when you want students to watch the database get built.
->
-> For an advanced class, add a third path: have students write their own build script instead of running `scripts/setup_data.sh`. It should read the 2023 NYC Yellow Taxi Parquet files, select and rename the columns used in this guide, load the rows into a `trips` table, create the `zones` lookup table, and save the result as `data/nyc_taxi.db`. `scripts/setup_data.sh` works as a reference; their version does not have to match it.
-
----
-
-## Step 4: Open the Database
-
-### From the command line
-
-```bash
-sqlite3 data/nyc_taxi.db
+sqlite3 -readonly /work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db
 ```
 
 You're now in an interactive SQL shell. Try:
@@ -94,18 +48,22 @@ SELECT COUNT(*) FROM trips;
 
 You should see ~38 million rows.
 
-### From a Jupyter notebook
+The database never touches your laptop. It lives on the HPC system and stays there, which is the whole reason you are working on the HPC system in the first place.
 
-If you're using Jupyter on HPC (see the [Jupyter guide](https://morehouse-supercomputing.github.io/jupyter-on-hpc/)):
+### From a Jupyter notebook instead
+
+In the same TAP session, open a new Python notebook from the Launcher:
 
 ```python
 import sqlite3
-conn = sqlite3.connect('data/nyc_taxi.db')
+conn = sqlite3.connect('file:/work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db?mode=ro', uri=True)
 cursor = conn.cursor()
 
 cursor.execute("SELECT COUNT(*) FROM trips")
 print(cursor.fetchone()[0])
 ```
+
+> **Instructor note:** To build your own copy of the database instead of using the staged one, clone this repo into `$WORK` and run `bash scripts/setup_data.sh` (10-15 minutes, ~9 GB). Do this before class, not during it.
 
 ---
 
@@ -313,8 +271,8 @@ A query that scans all 38 million rows needs to load the database into memory. A
 ## Tips for Instructors
 
 **Before class:**
-- Run `setup_data.sh` ahead of time so students don't wait 15 minutes
-- Consider cloning to a shared location on `$WORK` if all students are on the same allocation
+- Confirm the staged database opens from a student account on the allocation
+- Have students log in to TAP once before class so MFA problems surface early
 - Test your custom queries on the actual data
 
 **Adapting for your course:**
@@ -335,14 +293,11 @@ A query that scans all 38 million rows needs to load the database into memory. A
 **"sqlite3: command not found"**
 - SQLite is usually available system-wide on HPC. Try `/usr/bin/sqlite3`. If not, run `module load gcc/13.2.0` then `module load sqlite`.
 
-**"setup_data.sh is taking forever"**
-- The download is ~3 GB. On HPC it should take 5-10 minutes. Make sure you're on the login node (not a compute node) for better network access.
+**"unable to open database file"**
+- Check the path for typos. If it is correct, tell your instructor; your account may not be on the allocation yet.
 
-**"database is locked"**
-- Only one process can write to SQLite at a time. If the setup script failed partway, delete the database and re-run: `rm data/nyc_taxi.db && bash scripts/setup_data.sh`
-
-**"disk quota exceeded"**
-- You might be in `$HOME` (10 GB limit). Make sure you cloned into `$WORK`.
+**"attempt to write a readonly database"**
+- Expected. The staged database is shared and read-only, so `SELECT` queries work and `INSERT`, `UPDATE`, and `CREATE` do not.
 
 ---
 
@@ -350,7 +305,7 @@ A query that scans all 38 million rows needs to load the database into memory. A
 
 | Task | Command |
 |------|---------|
-| Open database | `sqlite3 data/nyc_taxi.db` |
+| Open database | `sqlite3 -readonly /work/10539/ashleyscruse/vista/gosha-sql-assignment/data/nyc_taxi.db` |
 | Count rows | `SELECT COUNT(*) FROM trips;` |
 | Show tables | `.tables` |
 | Show columns | `.schema trips` |
