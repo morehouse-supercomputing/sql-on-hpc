@@ -9,8 +9,6 @@ This guide walks you through running SQL queries on a large dataset using HPC. T
 
 **Dataset:** NYC Yellow Taxi trips (2023) — ~38 million trips, ~9 GB total on disk
 
-**For instructors:** This is a template. Adapt the queries to fit your course. The dataset and setup are ready to go.
-
 ---
 
 ## Prerequisites
@@ -62,8 +60,6 @@ cursor = conn.cursor()
 cursor.execute("SELECT COUNT(*) FROM trips")
 print(cursor.fetchone()[0])
 ```
-
-> **Instructor note:** To build your own copy of the database instead of using the staged one, clone this repo into `$WORK` and run `bash scripts/setup_data.sh` (10-15 minutes, ~9 GB). Do this before class, not during it.
 
 ---
 
@@ -264,28 +260,6 @@ This database has ~38 million rows and takes up ~9 GB on disk. Here's why you'd 
 
 A query that scans all 38 million rows needs to load the database into memory. At ~9 GB, a laptop with 8 GB of RAM can't hold it without swapping to disk. On HPC with 223 GB of RAM, 9 GB is a rounding error.
 
-> **For instructors:** The real teaching moment is when a student runs a query on their laptop and it takes 30 seconds, then runs the same query on HPC and it takes 2 seconds. That's the "aha."
-
----
-
-## Tips for Instructors
-
-**Before class:**
-- Confirm the staged database opens from a student account on the allocation
-- Have students log in to TAP once before class so MFA problems surface early
-- Test your custom queries on the actual data
-
-**Adapting for your course:**
-- The example queries cover SELECT, WHERE, GROUP BY, JOIN, HAVING, CASE, subqueries, and time extraction
-- Add your own queries to match your syllabus
-- The `zones` table is intentionally small (70 rows) to make JOINs fast for teaching
-- Payment type codes (1-4) are good for CASE WHEN exercises
-
-**Assessment ideas:**
-- "Write a query that finds the average tip percentage by zone for trips over 5 miles"
-- "Which hour of the day has the most expensive average fare? Why might that be?"
-- "Compare weekend vs weekday trip volumes" (requires date extraction)
-
 ---
 
 ## Troubleshooting
@@ -312,3 +286,7 @@ A query that scans all 38 million rows needs to load the database into memory. A
 | Pretty output | `.mode column` then `.headers on` |
 | Export to CSV | `.mode csv` then `.output results.csv` then run query |
 | Exit SQLite | `.quit` |
+
+---
+
+*Teaching this workshop? See the [instructor guide](instructors.html).*
