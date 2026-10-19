@@ -21,7 +21,7 @@ The workshop is a template. Adapt the queries to fit the course. The dataset and
   ```
 
   Then `SELECT COUNT(*) FROM trips;` should return ~38 million.
-- **Student logins.** Students should log in to TAP and finish MFA setup before class, so class time goes to the queries.
+- **Pre-work, graded.** Each student submits a screenshot of their account at `accounts.tacc.utexas.edu` showing they can log in and that MFA uses an authenticator app (Okta Verify or Google Authenticator). Never SMS.
 - **Custom queries.** If you add any, test them on the actual data first.
 
 ---

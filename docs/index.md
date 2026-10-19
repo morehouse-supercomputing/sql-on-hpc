@@ -15,7 +15,7 @@ This guide walks you through running SQL queries on a large dataset using HPC. T
 
 - An HPC account with MFA set up ([MSF Getting Started guide](https://morehouse-supercomputing.github.io/mscf-getting-started/))
 - Membership on the allocation your instructor is using
-- **Log in once before class** to confirm your account and MFA work, so class time goes to the queries
+- **Pre-work:** log in at `accounts.tacc.utexas.edu`, set up MFA with an authenticator app (Okta Verify or Google Authenticator, not SMS), and submit a screenshot of your account page
 
 ---
 
